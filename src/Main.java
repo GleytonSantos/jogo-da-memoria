@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static final String RESET = "\033[0m";  // Reseta a cor
     public static final String VERMELHO = "\033[91m";  // Cor branca
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -80,19 +81,48 @@ public class Main {
         String[][] tabela = new String[tamanho][tamanho];
         ArrayList<String> pares = new ArrayList<>();
 
+
         int numPares = (tamanho * tamanho) / 2;
-        for (int i = 0; i < numPares; i++) {
-            String letra = String.valueOf((char) ('A' + i));
-            pares.add(letra + "1");
-            pares.add(letra + "2");
+
+
+        int numPretas = 1;
+        int numAzuisVermelhas = numPares / 2;
+        int numAmarelas = numPares - numPretas - numAzuisVermelhas;
+
+
+        for (int i = 0; i < numPretas; i++) {
+            pares.add("K" + (i + 1));
         }
 
-        Collections.shuffle(pares);
+        for (int i = 0; i < numAzuisVermelhas; i++) {
+            pares.add("R" + (i + 1));
+            pares.add("B" + (i + 1));
+        }
+
+        for (int i = 0; i < numAmarelas; i++) {
+            pares.add("Y" + (i + 1));
+        }
+
+
+        if (pares.size() != numPares) {
+            System.out.println("Erro: a lista de pares tem " + pares.size() + " elementos, mas a tabela precisa de " + numPares + " pares.");
+        }
+
+
+        ArrayList<String> cartas = new ArrayList<>();
+        for (String carta : pares) {
+            cartas.add(carta);
+            cartas.add(carta);
+        }
+
+
+        Collections.shuffle(cartas);
+
 
         int index = 0;
         for (int i = 0; i < tamanho; i++) {
             for (int j = 0; j < tamanho; j++) {
-                tabela[i][j] = pares.get(index++);
+                tabela[i][j] = cartas.get(index++);
             }
         }
 
@@ -102,20 +132,20 @@ public class Main {
         String corPadrao = "\u001B[37m"; // Cor padrão (branco)
         String corEscolhida = "\u001B[32m"; // Verde para a carta escolhida (pode mudar para qualquer cor desejada)
 
-        return corEscolhida + carta + corPadrao;
+        return corEscolhida + carta + corPadrao ;
     }
 
     public static void exibirTabela(String[][] tabela) {
         int tamanho = tabela.length;
-        System.out.print("   ");
+        System.out.print("      ");
         for (int j = 0; j < tamanho; j++) {
-            System.out.print(" " + (j + 1) + "  ");
+            System.out.print(" [" + (j + 1) + "]  ");
         }
         System.out.println();
         for (int i = 0; i < tamanho; i++) {
-            System.out.print((i + 1) + " ");
+            System.out.print(" ["+ (i + 1) + "] ");
             for (int j = 0; j < tamanho; j++) {
-                System.out.print(" " + colorirCarta(tabela[i][j]) + " ");
+                System.out.print(" [" + colorirCarta(tabela[i][j]) + "] ");
             }
             System.out.println();
         }
@@ -133,24 +163,24 @@ public class Main {
             String[][] tabelaComDestaque = new String[tabela.length][tabela[0].length];
             for (int i = 0; i < tabela.length; i++) {
                 for (int j = 0; j < tabela[i].length; j++) {
-                    tabelaComDestaque[i][j] = tabela[i][j];  // Copia os valores da tabela original
+                    tabelaComDestaque[i][j] = tabela[i][j];
                 }
             }
-            tabelaComDestaque[linha1][coluna1] = VERMELHO + tabela[linha1][coluna1] + RESET;  // Destaca a carta escolhida
+            tabelaComDestaque[linha1][coluna1] = VERMELHO + tabela[linha1][coluna1] + RESET;
             exibirTabela(tabelaComDestaque);
 
             System.out.print("Escolha a segunda carta (linha e coluna, separadas por espaço): ");
             int linha2 = scanner.nextInt() - 1;
             int coluna2 = scanner.nextInt() - 1;
 
-            tabelaComDestaque[linha2][coluna2] = VERMELHO + tabela[linha2][coluna2] + RESET;  // Destaca a carta escolhida
+            tabelaComDestaque[linha2][coluna2] = VERMELHO + tabela[linha2][coluna2] + RESET;
             exibirTabela(tabelaComDestaque);
 
             if (tabela[linha1][coluna1] != null && tabela[linha2][coluna2] != null &&
                     tabela[linha1][coluna1].equals(tabela[linha2][coluna2])) {
                 System.out.println("Par encontrado! Removendo as cartas...");
-                tabela[linha1][coluna1] = "   ";
-                tabela[linha2][coluna2] = "   ";
+                tabela[linha1][coluna1] = "  ";
+                tabela[linha2][coluna2] = "  ";
             } else {
                 System.out.println("As cartas não são iguais. Tente novamente.");
             }
