@@ -122,11 +122,12 @@ public class Main {
         int index = 0;
         for (int i = 0; i < tamanho; i++) {
             for (int j = 0; j < tamanho; j++) {
+                //tabela[i][j] = "??";
                 tabela[i][j] = cartas.get(index++);
             }
         }
 
-        return tabela;
+        return tabela ;
     }
     public static String colorirCarta(String carta) {
         String corPadrao = "\u001B[37m"; // Cor padrão (branco)
@@ -135,7 +136,22 @@ public class Main {
         return corEscolhida + carta + corPadrao ;
     }
 
-    public static void exibirTabela(String[][] tabela) {
+//    public static void exibirTabela(String[][] tabela) {
+//        int tamanho = tabela.length;
+//        System.out.print("      ");
+//        for (int j = 0; j < tamanho; j++) {
+//            System.out.print(" [" + (j + 1) + "]  ");
+//        }
+//        System.out.println();
+//        for (int i = 0; i < tamanho; i++) {
+//            System.out.print(" ["+ (i + 1) + "] ");
+//            for (int j = 0; j < tamanho; j++) {
+//                System.out.print(" [" + colorirCarta(tabela[i][j]) + "] ");
+//            }
+//            System.out.println();
+//        }
+//    }
+    public static void exibirTabela(String[][] tabela, boolean[][] revelado) {
         int tamanho = tabela.length;
         System.out.print("      ");
         for (int j = 0; j < tamanho; j++) {
@@ -143,18 +159,24 @@ public class Main {
         }
         System.out.println();
         for (int i = 0; i < tamanho; i++) {
-            System.out.print(" ["+ (i + 1) + "] ");
+            System.out.print(" [" + (i + 1) + "] ");
             for (int j = 0; j < tamanho; j++) {
-                System.out.print(" [" + colorirCarta(tabela[i][j]) + "] ");
+                if (revelado[i][j]) {
+                    System.out.print(" [" + colorirCarta( tabela[i][j])+ "] ");
+                } else {
+                    System.out.print(" \u001B[32m[??]\u001B[37m ");
+                }
             }
             System.out.println();
         }
     }
 
+
     public static void jogar(String[][] tabela, Scanner scanner, String jogador1, String jogador2) {
         System.out.println("Jogadores: " + jogador1 + " vs " + jogador2);
+        boolean[][] revelado = new boolean[tabela.length][tabela[0].length];
         while (true) {
-            exibirTabela(tabela);
+            exibirTabela(tabela,revelado);
 
             System.out.print("Escolha a primeira carta (linha e coluna, separadas por espaço): ");
             int linha1 = scanner.nextInt() - 1;
@@ -167,14 +189,17 @@ public class Main {
                 }
             }
             tabelaComDestaque[linha1][coluna1] = VERMELHO + tabela[linha1][coluna1] + RESET;
-            exibirTabela(tabelaComDestaque);
+            revelado[linha1][coluna1] = true;
+            exibirTabela(tabelaComDestaque,revelado);
+
 
             System.out.print("Escolha a segunda carta (linha e coluna, separadas por espaço): ");
             int linha2 = scanner.nextInt() - 1;
             int coluna2 = scanner.nextInt() - 1;
 
             tabelaComDestaque[linha2][coluna2] = VERMELHO + tabela[linha2][coluna2] + RESET;
-            exibirTabela(tabelaComDestaque);
+            revelado[linha2][coluna2] = true;
+            exibirTabela(tabelaComDestaque,revelado);
 
             if (tabela[linha1][coluna1] != null && tabela[linha2][coluna2] != null &&
                     tabela[linha1][coluna1].equals(tabela[linha2][coluna2])) {
@@ -183,6 +208,14 @@ public class Main {
                 tabela[linha2][coluna2] = "  ";
             } else {
                 System.out.println("As cartas não são iguais. Tente novamente.");
+                revelado[linha1][coluna1] = false;
+                revelado[linha2][coluna2] = false;
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e ){
+                    System.out.println(e);
+                }
+                ;
             }
 
             if (jogoConcluido(tabela)) {
