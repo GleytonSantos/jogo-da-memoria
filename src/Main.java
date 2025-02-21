@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Main {
     public static final String RESET = "\033[0m";  // Reseta a cor
     public static final String VERMELHO = "\033[91m";  // Cor branca
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -81,14 +80,11 @@ public class Main {
         String[][] tabela = new String[tamanho][tamanho];
         ArrayList<String> pares = new ArrayList<>();
 
-
         int numPares = (tamanho * tamanho) / 2;
-
 
         int numPretas = 1;
         int numAzuisVermelhas = numPares / 2;
         int numAmarelas = numPares - numPretas - numAzuisVermelhas;
-
 
         for (int i = 0; i < numPretas; i++) {
             pares.add("K" + (i + 1));
@@ -108,49 +104,29 @@ public class Main {
             System.out.println("Erro: a lista de pares tem " + pares.size() + " elementos, mas a tabela precisa de " + numPares + " pares.");
         }
 
-
         ArrayList<String> cartas = new ArrayList<>();
         for (String carta : pares) {
             cartas.add(carta);
             cartas.add(carta);
         }
 
-
         Collections.shuffle(cartas);
-
 
         int index = 0;
         for (int i = 0; i < tamanho; i++) {
             for (int j = 0; j < tamanho; j++) {
-                //tabela[i][j] = "??";
                 tabela[i][j] = cartas.get(index++);
             }
         }
 
-        return tabela ;
+        return tabela;
     }
     public static String colorirCarta(String carta) {
         String corPadrao = "\u001B[37m"; // Cor padrão (branco)
         String corEscolhida = "\u001B[32m"; // Verde para a carta escolhida (pode mudar para qualquer cor desejada)
-
         return corEscolhida + carta + corPadrao ;
     }
 
-//    public static void exibirTabela(String[][] tabela) {
-//        int tamanho = tabela.length;
-//        System.out.print("      ");
-//        for (int j = 0; j < tamanho; j++) {
-//            System.out.print(" [" + (j + 1) + "]  ");
-//        }
-//        System.out.println();
-//        for (int i = 0; i < tamanho; i++) {
-//            System.out.print(" ["+ (i + 1) + "] ");
-//            for (int j = 0; j < tamanho; j++) {
-//                System.out.print(" [" + colorirCarta(tabela[i][j]) + "] ");
-//            }
-//            System.out.println();
-//        }
-//    }
     public static void exibirTabela(String[][] tabela, boolean[][] revelado) {
         int tamanho = tabela.length;
         System.out.print("      ");
@@ -171,11 +147,15 @@ public class Main {
         }
     }
 
-
     public static void jogar(String[][] tabela, Scanner scanner, String jogador1, String jogador2) {
         System.out.println("Jogadores: " + jogador1 + " vs " + jogador2);
         boolean[][] revelado = new boolean[tabela.length][tabela[0].length];
+        int pontosJ1 = 0, pontosJ2 = 0;
+        boolean turnoJ1 = true;
+
         while (true) {
+            System.out.println("Jogadores: "+ jogador1 + " (" + pontosJ1 + ") " + jogador2+ " (" + pontosJ2 + ") ");
+            System.out.println("Vez de: " + (turnoJ1 ? jogador1 : jogador2));
             exibirTabela(tabela,revelado);
 
             System.out.print("Escolha a primeira carta (linha e coluna, separadas por espaço): ");
@@ -192,7 +172,6 @@ public class Main {
             revelado[linha1][coluna1] = true;
             exibirTabela(tabelaComDestaque,revelado);
 
-
             System.out.print("Escolha a segunda carta (linha e coluna, separadas por espaço): ");
             int linha2 = scanner.nextInt() - 1;
             int coluna2 = scanner.nextInt() - 1;
@@ -206,6 +185,13 @@ public class Main {
                 System.out.println("Par encontrado! Removendo as cartas...");
                 tabela[linha1][coluna1] = "  ";
                 tabela[linha2][coluna2] = "  ";
+                System.out.println("Par encontrado! " + (turnoJ1 ? jogador1 : jogador2) + " ganha 1 ponto.");
+                if (turnoJ1){
+                    pontosJ1+= 5;
+                }
+                else{
+                    pontosJ2+= 5;
+                }
             } else {
                 System.out.println("As cartas não são iguais. Tente novamente.");
                 revelado[linha1][coluna1] = false;
@@ -217,11 +203,13 @@ public class Main {
                 }
                 ;
             }
-
             if (jogoConcluido(tabela)) {
                 System.out.println("Parabéns! Você concluiu o jogo!");
+                System.out.println(jogador1 + " pontuação final: " + pontosJ1);
+                System.out.println(jogador2 + " pontuação final: " + pontosJ2);
                 break;
             }
+            turnoJ1 = !turnoJ1;
         }
     }
 
