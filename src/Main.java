@@ -81,14 +81,11 @@ public class Main {
         String[][] tabela = new String[tamanho][tamanho];
         ArrayList<String> pares = new ArrayList<>();
 
-
         int numPares = (tamanho * tamanho) / 2;
-
 
         int numPretas = 1;
         int numAzuisVermelhas = numPares / 2;
         int numAmarelas = numPares - numPretas - numAzuisVermelhas;
-
 
         for (int i = 0; i < numPretas; i++) {
             pares.add("K" + (i + 1));
