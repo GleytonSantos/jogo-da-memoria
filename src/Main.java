@@ -157,10 +157,20 @@ public class Main {
             System.out.println("Jogadores: "+ jogador1 + " (" + pontosJ1 + ") " + jogador2+ " (" + pontosJ2 + ") ");
             System.out.println("Vez de: " + (turnoJ1 ? jogador1 : jogador2));
             exibirTabela(tabela,revelado);
+            int linha1;
+            int coluna1;
 
             System.out.print("Escolha a primeira carta (linha e coluna, separadas por espaço): ");
-            int linha1 = scanner.nextInt() - 1;
-            int coluna1 = scanner.nextInt() - 1;
+            do {
+                linha1 = scanner.nextInt() - 1;
+                coluna1  = scanner.nextInt() - 1;
+
+                if((linha1 >= tabela.length || linha1 <0) || (coluna1 >= tabela.length || coluna1 <0)) {
+                    System.out.println("Digite números entre 1 e " + (tabela.length));
+                }
+        } while ((linha1 >= tabela.length || linha1 <0) || (coluna1 >= tabela.length || coluna1 <0));
+
+
 
             String[][] tabelaComDestaque = new String[tabela.length][tabela[0].length];
             for (int i = 0; i < tabela.length; i++) {
@@ -173,8 +183,18 @@ public class Main {
             exibirTabela(tabelaComDestaque,revelado);
 
             System.out.print("Escolha a segunda carta (linha e coluna, separadas por espaço): ");
-            int linha2 = scanner.nextInt() - 1;
-            int coluna2 = scanner.nextInt() - 1;
+            int linha2 ;
+            int coluna2 ;
+
+            do {
+                linha2 = scanner.nextInt() - 1;
+                coluna2  = scanner.nextInt() - 1;
+
+                if((linha2 >= tabela.length || linha2 <0) || (coluna2 >= tabela.length || coluna2 <0)) {
+                    System.out.println("Digite números entre 1 e " + (tabela.length));
+                }
+            } while ((linha2 >= tabela.length || linha2 <0) || (coluna2 >= tabela.length || coluna2 <0));
+
 
             tabelaComDestaque[linha2][coluna2] = VERMELHO + tabela[linha2][coluna2] + RESET;
             revelado[linha2][coluna2] = true;
@@ -192,6 +212,11 @@ public class Main {
                 else{
                     pontosJ2+= 5;
                 }
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e ) {
+                    System.out.println(e);
+                };
             } else {
                 System.out.println("As cartas não são iguais. Tente novamente.");
                 revelado[linha1][coluna1] = false;
