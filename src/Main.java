@@ -5,6 +5,9 @@ import java.util.Scanner;
 public class Main {
     public static final String RESET = "\033[0m";  // Reseta a cor
     public static final String VERMELHO = "\033[91m";  // Cor branca
+    public static final String AZUL = "\033[34m";
+    public static final String PRETO = "\033[30m";
+    public static final String AMARELO = "\033[33m";
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -34,6 +37,8 @@ public class Main {
             System.out.println(jogador2);
             String [][] tabela  =  gerarTabela(tamanho);
             jogar(tabela,scanner,jogador1,jogador2);
+
+
 
         }
         else if (opcao == 2) {
@@ -83,20 +88,19 @@ public class Main {
         int numPares = (tamanho * tamanho) / 2;
 
         int numPretas = 1;
-        int numAzuisVermelhas = numPares / 2;
-        int numAmarelas = numPares - numPretas - numAzuisVermelhas;
+        int numAzuisVermelhas = (numPares-1) / 2;
+        int numAmarelas = (numPares) - numPretas - (numAzuisVermelhas*2);
 
         for (int i = 0; i < numPretas; i++) {
-            pares.add("K" + (i + 1));
+            pares.add(PRETO + "K" + (i + 1));
         }
-
         for (int i = 0; i < numAzuisVermelhas; i++) {
-            pares.add("R" + (i + 1));
-            pares.add("B" + (i + 1));
+            pares.add(AZUL + "B" + (i + 1));
+            pares.add(VERMELHO + "R" + (i + 1));
         }
 
         for (int i = 0; i < numAmarelas; i++) {
-            pares.add("Y" + (i + 1));
+            pares.add(AMARELO + "Y" + (i + 1));
         }
 
 
@@ -154,7 +158,7 @@ public class Main {
         boolean turnoJ1 = true;
 
         while (true) {
-            System.out.println("Jogadores: "+ jogador1 + " (" + pontosJ1 + ") " + jogador2+ " (" + pontosJ2 + ") ");
+            System.out.println("Jogadores: "+ AZUL + jogador1 + " (" + pontosJ1 + ") " + VERMELHO + jogador2+ " (" + pontosJ2 + ") ");
             System.out.println("Vez de: " + (turnoJ1 ? jogador1 : jogador2));
             exibirTabela(tabela,revelado);
 
@@ -168,7 +172,7 @@ public class Main {
                     tabelaComDestaque[i][j] = tabela[i][j];
                 }
             }
-            tabelaComDestaque[linha1][coluna1] = VERMELHO + tabela[linha1][coluna1] + RESET;
+            tabelaComDestaque[linha1][coluna1] =  tabela[linha1][coluna1] ;
             revelado[linha1][coluna1] = true;
             exibirTabela(tabelaComDestaque,revelado);
 
@@ -176,7 +180,7 @@ public class Main {
             int linha2 = scanner.nextInt() - 1;
             int coluna2 = scanner.nextInt() - 1;
 
-            tabelaComDestaque[linha2][coluna2] = VERMELHO + tabela[linha2][coluna2] + RESET;
+            tabelaComDestaque[linha2][coluna2] = tabela[linha2][coluna2] ;
             revelado[linha2][coluna2] = true;
             exibirTabela(tabelaComDestaque,revelado);
 
