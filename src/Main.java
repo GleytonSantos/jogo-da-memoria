@@ -3,8 +3,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 public class Main {
-    public static final String RESET = "\033[0m";
-    public static final String VERMELHO = "\033[91m";
+    public static final String RESET = "\033[0m";  // Reseta a cor
+    public static final String VERMELHO = "\033[91m";  // Cor branca
+    public static final String AZUL = "\033[34m";
+    public static final String PRETO = "\033[30m";
+    public static final String AMARELO = "\033[33m";
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -34,6 +37,8 @@ public class Main {
             System.out.println(jogador2);
             String [][] tabela  =  gerarTabela(tamanho);
             jogar(tabela,scanner,jogador1,jogador2);
+
+
 
         }
         else if (opcao == 2) {
@@ -83,24 +88,19 @@ public class Main {
         int numPares = (tamanho * tamanho) / 2;
 
         int numPretas = 1;
-        int numAzuisVermelhas = (numPares) / 4;
+        int numAzuisVermelhas = (numPares-1) / 4;
         int numAmarelas = (numPares) - numPretas - (numAzuisVermelhas*2);
 
-
-        for (int i = 1; i <= numPretas; i++) {
-            pares.add("\033[30m"+"K" + (i + 1));
+        for (int i = 0; i < numPretas; i++) {
+            pares.add(PRETO + "K" + (i + 1));
+        }
+        for (int i = 0; i < numAzuisVermelhas; i++) {
+            pares.add(AZUL + "B" + (i + 1));
+            pares.add(VERMELHO + "R" + (i + 1));
         }
 
-        for (int i = 1; i <= numAzuisVermelhas; i++) {
-            pares.add("\033[91m" + "R" + (i + 1));
-            pares.add("\033[34m"+ "B" + (i + 1));
-
-
-        }
-
-        for (int i = 1; i <= numAmarelas; i++) {
-            pares.add("\033[33m"+"Y" + (i + 1));
-
+        for (int i = 0; i < numAmarelas; i++) {
+            pares.add(AMARELO + "Y" + (i + 1));
         }
 
 
@@ -126,8 +126,8 @@ public class Main {
         return tabela;
     }
     public static String colorirCarta(String carta) {
-        String corPadrao = "\u001B[37m";
-        String corEscolhida = "\u001B[32m";
+        String corPadrao = "\u001B[37m"; // Cor padrão (branco)
+        String corEscolhida = "\u001B[32m"; // Verde para a carta escolhida (pode mudar para qualquer cor desejada)
         return corEscolhida + carta + corPadrao ;
     }
 
@@ -143,9 +143,9 @@ public class Main {
             for (int j = 0; j < tamanho; j++) {
                 if (revelado[i][j]) {
                     System.out.print(" [" + colorirCarta( tabela[i][j])+ "] ");
-               } else {
-                  System.out.print(" \u001B[32m[??]\u001B[37m ");
-               }
+                } else {
+                    System.out.print(" \u001B[32m[??]\u001B[37m ");
+                }
             }
             System.out.println();
         }
@@ -158,7 +158,7 @@ public class Main {
         boolean turnoJ1 = true;
 
         while (true) {
-            System.out.println("Jogadores: "+ jogador1 + " (" + pontosJ1 + ") " + jogador2+ " (" + pontosJ2 + ") ");
+            System.out.println("Jogadores: "+ AZUL + jogador1 + " (" + pontosJ1 + ") " + VERMELHO + jogador2+ " (" + pontosJ2 + ") ");
             System.out.println("Vez de: " + (turnoJ1 ? jogador1 : jogador2));
             exibirTabela(tabela,revelado);
             int linha1;
@@ -182,7 +182,7 @@ public class Main {
                     tabelaComDestaque[i][j] = tabela[i][j];
                 }
             }
-            tabelaComDestaque[linha1][coluna1] = VERMELHO + tabela[linha1][coluna1] + RESET;
+            tabelaComDestaque[linha1][coluna1] =  tabela[linha1][coluna1] ;
             revelado[linha1][coluna1] = true;
             exibirTabela(tabelaComDestaque,revelado);
 
@@ -200,7 +200,7 @@ public class Main {
             } while ((linha2 >= tabela.length || linha2 <0) || (coluna2 >= tabela.length || coluna2 <0));
 
 
-            tabelaComDestaque[linha2][coluna2] = VERMELHO + tabela[linha2][coluna2] + RESET;
+            tabelaComDestaque[linha2][coluna2] = tabela[linha2][coluna2] ;
             revelado[linha2][coluna2] = true;
             exibirTabela(tabelaComDestaque,revelado);
 
