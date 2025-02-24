@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 public class Main {
-    public static final String RESET = "\033[0m";  // Reseta a cor
-    public static final String VERMELHO = "\033[91m";  // Cor branca
+    public static final String RESET = "\033[0m";
+    public static final String VERMELHO = "\033[91m";
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -83,20 +83,24 @@ public class Main {
         int numPares = (tamanho * tamanho) / 2;
 
         int numPretas = 1;
-        int numAzuisVermelhas = numPares / 2;
-        int numAmarelas = numPares - numPretas - numAzuisVermelhas;
+        int numAzuisVermelhas = (numPares) / 4;
+        int numAmarelas = (numPares) - numPretas - (numAzuisVermelhas*2);
 
-        for (int i = 0; i < numPretas; i++) {
-            pares.add("K" + (i + 1));
+
+        for (int i = 1; i <= numPretas; i++) {
+            pares.add("\033[30m"+"K" + (i + 1));
         }
 
-        for (int i = 0; i < numAzuisVermelhas; i++) {
-            pares.add("R" + (i + 1));
-            pares.add("B" + (i + 1));
+        for (int i = 1; i <= numAzuisVermelhas; i++) {
+            pares.add("\033[91m" + "R" + (i + 1));
+            pares.add("\033[34m"+ "B" + (i + 1));
+
+
         }
 
-        for (int i = 0; i < numAmarelas; i++) {
-            pares.add("Y" + (i + 1));
+        for (int i = 1; i <= numAmarelas; i++) {
+            pares.add("\033[33m"+"Y" + (i + 1));
+
         }
 
 
@@ -122,8 +126,8 @@ public class Main {
         return tabela;
     }
     public static String colorirCarta(String carta) {
-        String corPadrao = "\u001B[37m"; // Cor padrão (branco)
-        String corEscolhida = "\u001B[32m"; // Verde para a carta escolhida (pode mudar para qualquer cor desejada)
+        String corPadrao = "\u001B[37m";
+        String corEscolhida = "\u001B[32m";
         return corEscolhida + carta + corPadrao ;
     }
 
@@ -139,9 +143,9 @@ public class Main {
             for (int j = 0; j < tamanho; j++) {
                 if (revelado[i][j]) {
                     System.out.print(" [" + colorirCarta( tabela[i][j])+ "] ");
-                } else {
-                    System.out.print(" \u001B[32m[??]\u001B[37m ");
-                }
+               } else {
+                  System.out.print(" \u001B[32m[??]\u001B[37m ");
+               }
             }
             System.out.println();
         }
