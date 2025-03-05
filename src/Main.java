@@ -145,11 +145,11 @@ public class Main {
         for (int i = 0; i < tamanho; i++) {
             System.out.print(" [" + (i + 1) + "] ");
             for (int j = 0; j < tamanho; j++) {
-                //if (revelado[i][j]) {
+                if (revelado[i][j]) {
                 System.out.print(" [" + colorirCarta(tabela[i][j]) + "] ");
-                //}else {
-                // System.out.print(" \u001B[32m[??]\u001B[37m ");
-                //}
+                }else {
+                 System.out.print(" \u001B[32m[??]\u001B[37m ");
+                }
             }
             System.out.println();
         }
