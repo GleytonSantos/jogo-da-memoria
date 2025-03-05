@@ -87,7 +87,7 @@ public class Main {
         int numPares = (tamanho * tamanho) / 2;
 
         int numPretas = 1;
-        int numAzuisVermelhas = (numPares-1) / 4;
+        int numAzuisVermelhas = (numPares-1) / 2;
         int numAmarelas = (numPares) - numPretas - (numAzuisVermelhas*2);
 
         for (int i = 0; i < numPretas; i++) {
@@ -140,11 +140,11 @@ public class Main {
         for (int i = 0; i < tamanho; i++) {
             System.out.print(" [" + (i + 1) + "] ");
             for (int j = 0; j < tamanho; j++) {
-                //if (revelado[i][j]) {
+                if (revelado[i][j]) {
                     System.out.print(" [" + colorirCarta( tabela[i][j])+ "] ");
-               // } else {
-                   // System.out.print(" \u001B[32m[??]\u001B[37m ");
-               // }
+               } else {
+                    System.out.print(" \u001B[32m[??]\u001B[37m ");
+               }
             }
             System.out.println();
         }
@@ -155,11 +155,10 @@ public class Main {
         boolean[][] revelado = new boolean[tabela.length][tabela[0].length];
         int pontosJ1 = 0, pontosJ2 = 0;
         boolean turnoJ1 = true;
-        String CorJogador1 = AZUL;
-        String CorJogador2 = VERMELHO;
-
+        String corJogador1 = "B";
+        String corJogador2 = "V";
         while (true) {
-            System.out.println("Jogadores: "+ CorJogador1 + jogador1 + " (" + pontosJ1 + ") " + CorJogador2 + jogador2+ " (" + pontosJ2 + ") ");
+            System.out.println("Jogadores: "+ AZUL + jogador1 + " (" + pontosJ1 + ") " + VERMELHO + jogador2+ " (" + pontosJ2 + ") " + RESET);
             System.out.println("Vez de: " + (turnoJ1 ? jogador1 : jogador2));
             exibirTabela(tabela,revelado);
             int linha1;
@@ -212,15 +211,15 @@ public class Main {
                 tabela[linha1][coluna1] = "  ";
                 tabela[linha2][coluna2] = "  ";
                 System.out.println("Par encontrado! " + (turnoJ1 ? jogador1 : jogador2) + " ganha 1 ponto.");
-
-                if(tabela[linha1][coluna1].contains("B") && turnoJ1) {
+                String corEscolhida = tabela[linha1][coluna2];
+                if(corEscolhida == "B" && turnoJ1) {
                     pontosJ1 += 5;
-                }else if(tabela[linha1][coluna1].contains("V") && !turnoJ1){
+                }else if(corEscolhida == "V" && !turnoJ1){
                      pontosJ2 += 5;
                 }
-                else if(tabela[linha1][coluna1].contains("V") && turnoJ1){
+                else if(corEscolhida == "V" && turnoJ1){
                     pontosJ1 -= 2;
-                }else if(tabela[linha1][coluna1].contains("B") && !turnoJ1){
+                }else if(corEscolhida == "B" && !turnoJ1){
                     pontosJ2 -= 2;
                 }
 
