@@ -140,11 +140,11 @@ public class Main {
         for (int i = 0; i < tamanho; i++) {
             System.out.print(" [" + (i + 1) + "] ");
             for (int j = 0; j < tamanho; j++) {
-                if (revelado[i][j]) {
+              //  if (revelado[i][j]) {
                     System.out.print(" [" + colorirCarta( tabela[i][j])+ "] ");
-               } else {
-                    System.out.print(" \u001B[32m[??]\u001B[37m ");
-               }
+              // } else {
+                   // System.out.print(" \u001B[32m[??]\u001B[37m ");
+              // }
             }
             System.out.println();
         }
@@ -155,15 +155,13 @@ public class Main {
         boolean[][] revelado = new boolean[tabela.length][tabela[0].length];
         int pontosJ1 = 0, pontosJ2 = 0;
         boolean turnoJ1 = true;
-        String corJogador1 = "B";
-        String corJogador2 = "V";
+
         while (true) {
             System.out.println("Jogadores: "+ AZUL + jogador1 + " (" + pontosJ1 + ") " + VERMELHO + jogador2+ " (" + pontosJ2 + ") " + RESET);
             System.out.println("Vez de: " + (turnoJ1 ? jogador1 : jogador2));
             exibirTabela(tabela,revelado);
             int linha1;
             int coluna1;
-
 
             System.out.print("Escolha a primeira carta (linha e coluna, separadas por espaço): ");
             do {
@@ -186,7 +184,18 @@ public class Main {
             tabelaComDestaque[linha1][coluna1] =  tabela[linha1][coluna1] ;
             revelado[linha1][coluna1] = true;
             exibirTabela(tabelaComDestaque,revelado);
+            String corEscolhida = tabela[linha1][coluna1];
 
+            if(corEscolhida.contains("B") && turnoJ1) {
+                pontosJ1 += 5;
+            }else if(corEscolhida.contains("R") && !turnoJ1){
+                pontosJ2 += 5;
+            }
+            else if(corEscolhida.contains("Rx") && turnoJ1){
+                pontosJ1 -= 2;
+            }else if(corEscolhida.contains("B") && !turnoJ1){
+                pontosJ2 -= 2;
+            }
             System.out.print("Escolha a segunda carta (linha e coluna, separadas por espaço): ");
             int linha2 ;
             int coluna2 ;
@@ -211,17 +220,8 @@ public class Main {
                 tabela[linha1][coluna1] = "  ";
                 tabela[linha2][coluna2] = "  ";
                 System.out.println("Par encontrado! " + (turnoJ1 ? jogador1 : jogador2) + " ganha 1 ponto.");
-                String corEscolhida = tabela[linha1][coluna2];
-                if(corEscolhida == "B" && turnoJ1) {
-                    pontosJ1 += 5;
-                }else if(corEscolhida == "V" && !turnoJ1){
-                     pontosJ2 += 5;
-                }
-                else if(corEscolhida == "V" && turnoJ1){
-                    pontosJ1 -= 2;
-                }else if(corEscolhida == "B" && !turnoJ1){
-                    pontosJ2 -= 2;
-                }
+
+
 
                 try {
                     Thread.sleep(3000);
@@ -239,6 +239,7 @@ public class Main {
                 }
                 ;
             }
+
             if (jogoConcluido(tabela)) {
                 System.out.println("Parabéns! Você concluiu o jogo!");
                 System.out.println(jogador1 + " pontuação final: " + pontosJ1);
@@ -246,6 +247,7 @@ public class Main {
                 break;
             }
             turnoJ1 = !turnoJ1;
+
         }
     }
 
