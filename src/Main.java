@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
 public class Main {
@@ -9,7 +10,10 @@ public class Main {
     public static final String AMARELO = "\033[33m";
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
+        iniciarJogo(scanner);
+        scanner.close();
+    }
+    public static void iniciarJogo(Scanner scanner) {
         System.out.println("Escolha uma opção de 1 a 4: ");
         System.out.println("1. iniciar");
         System.out.println("2. Pontuação participantes");
@@ -80,6 +84,7 @@ public class Main {
 
         scanner.close();
     }
+
     public static String[][] gerarTabela(int tamanho) {
         String[][] tabela = new String[tamanho][tamanho];
         ArrayList<String> pares = new ArrayList<>();
@@ -140,11 +145,11 @@ public class Main {
         for (int i = 0; i < tamanho; i++) {
             System.out.print(" [" + (i + 1) + "] ");
             for (int j = 0; j < tamanho; j++) {
-              if (revelado[i][j]) {
-                  System.out.print(" [" + colorirCarta(tabela[i][j]) + "] ");
-              }else {
-                   System.out.print(" \u001B[32m[??]\u001B[37m ");
-              }
+                //if (revelado[i][j]) {
+                System.out.print(" [" + colorirCarta(tabela[i][j]) + "] ");
+                //}else {
+                // System.out.print(" \u001B[32m[??]\u001B[37m ");
+                //}
             }
             System.out.println();
         }
@@ -157,11 +162,13 @@ public class Main {
         boolean turnoJ1 = true;
 
         while (true) {
+
             System.out.println("Jogadores: "+ AZUL + jogador1 + " (" + pontosJ1 + ") " + VERMELHO + jogador2+ " (" + pontosJ2 + ") " + RESET);
             System.out.println("Vez de: " + (turnoJ1 ? jogador1 : jogador2));
             exibirTabela(tabela,revelado);
             int linha1;
             int coluna1;
+            int pontosRodada = 0;
 
             System.out.print("Escolha a primeira carta (linha e coluna, separadas por espaço): ");
             do {
@@ -186,16 +193,10 @@ public class Main {
             exibirTabela(tabelaComDestaque,revelado);
             String corEscolhida = tabela[linha1][coluna1];
 
-            if(corEscolhida.contains("B") && turnoJ1) {
-                pontosJ1 += 5;
-            }else if(corEscolhida.contains("R") && !turnoJ1){
-                pontosJ2 += 5;
-            }
-            else if(corEscolhida.contains("R") && turnoJ1){
-                pontosJ1 -= 2;
-            }else if(corEscolhida.contains("B") && !turnoJ1){
-                pontosJ2 -= 2;
-            }
+
+
+
+
             System.out.print("Escolha a segunda carta (linha e coluna, separadas por espaço): ");
             int linha2 ;
             int coluna2 ;
@@ -214,12 +215,58 @@ public class Main {
             revelado[linha2][coluna2] = true;
             exibirTabela(tabelaComDestaque,revelado);
 
-            if (tabela[linha1][coluna1] != null && tabela[linha2][coluna2] != null &&
-                    tabela[linha1][coluna1].equals(tabela[linha2][coluna2])) {
+            if (
+                    tabela[linha1][coluna1].contains("  ") || tabela[linha2][coluna2].contains("  ")
+
+            ){
+              System.out.println("Uma das cartas já foi escolhida, tente novamente!");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e ) {
+                    System.out.println(e);
+                };
+            }
+
+            else if(tabela[linha1][coluna1] != null && tabela[linha2][coluna2] != null && tabela[linha1][coluna1].equals(tabela[linha2][coluna2])) {
+
+                if(corEscolhida.contains("K")){
+                    System.out.println("Carta preta encontrada! - O jogo terminou - o Jogador " + (turnoJ1 ? jogador1 : jogador2) + " ganhou o jogo");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e ) {
+                        System.out.println(e);
+                    };
+                    iniciarJogo(scanner);
+                    break;
+                }
+
                 System.out.println("Par encontrado! Removendo as cartas...");
                 tabela[linha1][coluna1] = "  ";
                 tabela[linha2][coluna2] = "  ";
-                System.out.println("Par encontrado! " + (turnoJ1 ? jogador1 : jogador2) + " ganha 1 ponto.");
+
+
+
+                if(corEscolhida.contains("B") && turnoJ1) {
+                    pontosRodada = 5;
+
+                }else if(corEscolhida.contains("R") && !turnoJ1){
+                    pontosRodada = 5;
+
+                }
+                else if(corEscolhida.contains("R" ) && turnoJ1){
+                    pontosRodada = -2;
+
+                }else if(corEscolhida.contains("B" ) && !turnoJ1){
+                    pontosRodada = -2;
+
+                }
+                if (turnoJ1) {
+                    pontosJ1 += pontosRodada;
+                } else {
+                    pontosJ2 += pontosRodada;
+                }
+
+                System.out.println("Par encontrado! " + (turnoJ1 ? jogador1 : jogador2) + (pontosRodada>0 ? " ganha ":" perde ") + pontosRodada +  " pontos.");
 
 
 
