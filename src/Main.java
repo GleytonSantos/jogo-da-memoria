@@ -87,7 +87,7 @@ public class Main {
         int numPares = (tamanho * tamanho) / 2;
 
         int numPretas = 1;
-        int numAzuisVermelhas = (numPares-1) / 2;
+        int numAzuisVermelhas = (numPares-1) / 4;
         int numAmarelas = (numPares) - numPretas - (numAzuisVermelhas*2);
 
         for (int i = 0; i < numPretas; i++) {
