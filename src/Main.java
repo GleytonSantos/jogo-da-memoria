@@ -191,7 +191,7 @@ public class Main {
             }else if(corEscolhida.contains("R") && !turnoJ1){
                 pontosJ2 += 5;
             }
-            else if(corEscolhida.contains("Rx") && turnoJ1){
+            else if(corEscolhida.contains("R") && turnoJ1){
                 pontosJ1 -= 2;
             }else if(corEscolhida.contains("B") && !turnoJ1){
                 pontosJ2 -= 2;
