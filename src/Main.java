@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
+
 public class Main {
     public static final String RESET = "\033[0m";  // Reseta a cor
     public static final String VERMELHO = "\033[91m";  // Cor branca
@@ -60,12 +58,9 @@ public class Main {
                     "seguinte distribuição:\r\n" + //
                     "1. 4 (quatro) figuras vermelhas e azuis (2 vermelhas e 2 azuis).\r\n" + //
                     "2. 1 (uma) figura preta.\r\n" + //
-                    "3. 3 (três) figuras amarelas.\r\n" + //
-                    "Bom, vamos para as outras regras? Vamos, né?! Acho que essa parte já deu para entender.\r\n" + //
-                    "Lá vamos nós:\r\n" + //
-                    "1. Cada participante deve ter atribuído a si uma cor (vermelho ou azul) no início do\r\n" + //
-                    "jogo.\r\n" + //
-                    "2. Todo participante deve ter um nome registrado. Senão, o nome padrão\r\n" + //
+                    "3. 3 (três) figuras amarelas.\r\n");
+
+            System.out.println("2. Todo participante deve ter um nome registrado. Senão, o nome padrão\r\n" + //
                     "“PARTICIPANTE01” e “PARTICIPANTE02” devem ser atribuídos a cada um das(os)\r\n" + //
                     "participantes.\r\n" + //
                     "3. Cada participante possui uma pontuação atrelada a si.\r\n" + //
@@ -74,15 +69,31 @@ public class Main {
                     "5. Se a(o) participante encontrar um par de cartas com o fundo da sua cor, fatura 5\r\n" + //
                     "pontos.\r\n" + //
                     "6. Se a(o) participante encontrar um par de cartas com o fundo da cor de seu\r\n" + //
-                    "adversário e errar, perde 2 pontos. Porém, se acertar, ganha apenas 1 ponto.\r\n" + //
+                    "adversário e errar, perde 2 pontos. Porém, se acertar, ganha apenas 1 ponto. Essa\r\n" + //
+                    "regra deve ser aplicada a cor da primeira carta virada na rodada.\r\n" + //
                     "7. A(o) participante não pode ter pontuação negativa. Se ela(ele) perder mais\r\n" + //
                     "pontos do que possui, ficará com a pontuação zerada.\r\n" + //
                     "8. Se a(o) participante encontrar uma carta com o fundo preto e errar o seu par,\r\n" + //
-                    "perde o jogo, mesmo que tenha a pontuação superior à da(o) outra(o)\r\n" + //
-                    "participante. Mas se acertar, ganha o jogo.");
+                    "perde 50 pontos, mas se acertar, ganha os 50 pontos.\n" + //
+                    "");
+
+            System.out.println("Outras regras importantes:\r\n" + //
+                    "1. Se a(o) participante informar uma opção de tamanho de tabuleiro inválida, você\r\n" + //
+                    "deve apresentar a seguinte mensagem de advertência: “Por favor, escolha umas\r\n" + //
+                    "das opções de tamanho de tabuleiro disponíveis”.\r\n" + //
+                    "2. Participantes devem informar a linha e a coluna da carta que desejam virar.\r\n" + //
+                    "3. Valores de linha e coluna inválidos devem exibir uma mensagem de erro:\r\n" + //
+                    "“Posição da carta inválida, por favor, insira uma posição válida”. Você deve\r\n" + //
+                    "continuar solicitando ao usuário uma nova posição até que uma posição válida\r\n" + //
+                    "seja informada ou até que o usuário erre 3 vezes. Caso a(o) participante erre três\r\n" + //
+                    "vezes, ela(ele) perde a vez para a(o) adversária(o).\r\n" + //
+                    "4. Se a(o) participante escolher uma carta já virada, uma mensagem de atenção\r\n" + //
+                    "deve ser exibida: “A carta da posição informada já está virada, por favor, escolha\r\n" + //
+                    "outra posição”. Você deve continuar solicitando ao usuário uma nova posição até\r\n" + //
+                    "que uma posição válida seja informada ou até que o usuário erre 3 vezes. Caso\r\n" + //
+                    "a(o) participante erre três vezes, ela(ele) perde a vez para a(o) adversária(o).");
         }
 
-        scanner.close();
     }
 
     public static String[][] gerarTabela(int tamanho) {
@@ -145,9 +156,9 @@ public class Main {
         for (int i = 0; i < tamanho; i++) {
             System.out.print(" [" + (i + 1) + "] ");
             for (int j = 0; j < tamanho; j++) {
-                if (revelado[i][j]) {
+                 if (revelado[i][j]) {
                 System.out.print(" [" + colorirCarta(tabela[i][j]) + "] ");
-                }else {
+                 }else {
                  System.out.print(" \u001B[32m[??]\u001B[37m ");
                 }
             }
@@ -191,7 +202,7 @@ public class Main {
             tabelaComDestaque[linha1][coluna1] =  tabela[linha1][coluna1] ;
             revelado[linha1][coluna1] = true;
             exibirTabela(tabelaComDestaque,revelado);
-            String corEscolhida = tabela[linha1][coluna1];
+
 
 
 
@@ -200,7 +211,7 @@ public class Main {
             System.out.print("Escolha a segunda carta (linha e coluna, separadas por espaço): ");
             int linha2 ;
             int coluna2 ;
-
+            String corEscolhida;
             do {
                 linha2 = scanner.nextInt() - 1;
                 coluna2  = scanner.nextInt() - 1;
@@ -212,6 +223,7 @@ public class Main {
 
 
             tabelaComDestaque[linha2][coluna2] = tabela[linha2][coluna2] ;
+            corEscolhida = tabela[linha1][coluna1] + tabela[linha2][coluna2];
             revelado[linha2][coluna2] = true;
             exibirTabela(tabelaComDestaque,revelado);
 
@@ -219,7 +231,7 @@ public class Main {
                     tabela[linha1][coluna1].contains("  ") || tabela[linha2][coluna2].contains("  ")
 
             ){
-              System.out.println("Uma das cartas já foi escolhida, tente novamente!");
+                System.out.println("Uma das cartas já foi escolhida, tente novamente!");
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e ) {
@@ -251,15 +263,16 @@ public class Main {
 
                 }else if(corEscolhida.contains("R") && !turnoJ1){
                     pontosRodada = 5;
-
                 }
-                else if(corEscolhida.contains("R" ) && turnoJ1){
-                    pontosRodada = -2;
 
-                }else if(corEscolhida.contains("B" ) && !turnoJ1){
-                    pontosRodada = -2;
-
+                //ADIÇÃO DE PONTOS PARA CARTAS DE CORES DIFERENTES DA SUA
+                else if ((corEscolhida.contains("R") && turnoJ1) || (corEscolhida.contains("B") && !turnoJ1)) {
+                    pontosRodada = 1;
+                } else if(corEscolhida.contains("Y") && !turnoJ1 || corEscolhida.contains("Y") && turnoJ1){
+                    pontosRodada = 1;
                 }
+
+
                 if (turnoJ1) {
                     pontosJ1 += pontosRodada;
                 } else {
@@ -267,7 +280,6 @@ public class Main {
                 }
 
                 System.out.println("Par encontrado! " + (turnoJ1 ? jogador1 : jogador2) + (pontosRodada>0 ? " ganha ":" perde ") + pontosRodada +  " pontos.");
-
 
 
                 try {
@@ -279,6 +291,18 @@ public class Main {
                 System.out.println("As cartas não são iguais. Tente novamente.");
                 revelado[linha1][coluna1] = false;
                 revelado[linha2][coluna2] = false;
+                //REMOÇÃO DE PONTOS CASO ERRE AS CARTAS DIFERENTES DA SUA COR
+                if(tabela[linha2][coluna2] != tabela[linha1][coluna1]){
+                    if ((corEscolhida.contains("R") && turnoJ1) || (corEscolhida.contains("B") && !turnoJ1)) {
+                        pontosRodada = -2;
+                    }
+                }
+                if (turnoJ1) {
+                    pontosJ1 += pontosRodada;
+                } else {
+                    pontosJ2 += pontosRodada;
+                }
+
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e ){
